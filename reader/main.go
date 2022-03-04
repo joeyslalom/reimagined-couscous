@@ -33,4 +33,5 @@ func main() {
 
 	}
 	cancel()
+	log.Println("fin")
 }
