@@ -18,3 +18,10 @@ go + pubsub + protobuf + grpc
 * Add CloudShell to authorized networks `echo $(dig +short myip.opendns.com @resolver1.opendns.com)/32`
 * Install the chart `helm install rc helm/ -n pubsub --create-namespace`
 * Iterate `helm upgrade rc helm/ -n pubsub`
+
+## Cobra
+* Install `go install github.com/spf13/cobra/cobra@latest`
+
+        cobra init
+        cobra add reader
+        cobra add writer
