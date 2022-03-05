@@ -2,10 +2,6 @@
 
 go + pubsub + protobuf + grpc
 
-## CloudBuild
-
-* Buildpack https://github.com/GoogleCloudPlatform/buildpacks/blob/main/README.md
-* Environment Variable: `GOOGLE_BUILDABLE`=`./reader`
 
 ## Service Account to read pubsub
 
@@ -25,3 +21,8 @@ go + pubsub + protobuf + grpc
         cobra init
         cobra add reader
         cobra add writer
+
+## CloudBuild
+
+* Buildpack https://github.com/GoogleCloudPlatform/buildpacks/blob/main/README.md
+* Environment Variable: `GOOGLE_ENTRYPOINT`=`main reader`
