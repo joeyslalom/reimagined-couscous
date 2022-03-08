@@ -15,3 +15,7 @@
 # vendor/
 
 bin/
+reimagined-couscous
+
+.idea/
+*.iml

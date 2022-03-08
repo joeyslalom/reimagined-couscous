@@ -7,10 +7,13 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"github.com/golang/protobuf/proto"
 	"log"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/spf13/cobra"
+
+	pb "github.com/joeyslalom/reimagined-couscous/proto"
 )
 
 // writerCmd represents the writer command
@@ -56,8 +59,12 @@ func doWriter() {
 
 	topicId := "reimagined-couscous"
 	t := client.Topic(topicId)
+	data, err := proto.Marshal(&pb.HelloRequest{Name: "okay"})
+	if err != nil {
+		log.Fatalf("proto.Marshal: %v", err)
+	}
 	result := t.Publish(ctx, &pubsub.Message{
-		Data: []byte("ahnyoung"),
+		Data: data,
 	})
 	id, err := result.Get(ctx)
 	if err != nil {

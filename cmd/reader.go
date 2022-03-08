@@ -7,11 +7,14 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"github.com/golang/protobuf/proto"
 	"log"
 	"time"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/spf13/cobra"
+
+	pb "github.com/joeyslalom/reimagined-couscous/proto"
 )
 
 // readerCmd represents the reader command
@@ -59,7 +62,11 @@ func doReader() {
 	sub := client.Subscription(subId)
 	cctx, cancel := context.WithCancel(ctx)
 	err = sub.Receive(cctx, func(ctx context.Context, m *pubsub.Message) {
-		log.Printf("Got message: %s", m.Data)
+		req := &pb.HelloRequest{}
+		if err := proto.Unmarshal(m.Data, req); err != nil {
+			log.Fatal("proto.Unmarshal: %v", err)
+		}
+		log.Printf("Got message: %s", req.Name)
 		time.Sleep(10 * time.Second)
 		m.Ack()
 	})
