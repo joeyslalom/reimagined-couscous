@@ -13,7 +13,7 @@ go + pubsub + protobuf + grpc
 
 * Add CloudShell to authorized networks `echo $(dig +short myip.opendns.com @resolver1.opendns.com)/32`
 * Install the chart `helm install rc helm/ -n pubsub --create-namespace`
-* Iterate `helm upgrade rc helm/ -n pubsub`
+* Iterate `helm upgrade rc helm/ -n pubsub --set=image.tag=<commit-sha>`
 
 ## Cobra
 * Install `go install github.com/spf13/cobra/cobra@latest`
@@ -29,6 +29,6 @@ go + pubsub + protobuf + grpc
 
 ## Protobuf + gRPC
 
-* Install and run the `protoc` compiler:
+* Install and run the `protoc` compiler.  Cloudshell also required package `golang-goprotobuf-dev`
 
       protoc --go_out=. --go_opt=paths=source_relative     --go-grpc_out=. --go-grpc_opt=paths=source_relative     proto/hello.proto

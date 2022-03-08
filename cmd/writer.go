@@ -1,17 +1,13 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"context"
-	"fmt"
-	"github.com/golang/protobuf/proto"
 	"log"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/spf13/cobra"
+	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	pb "github.com/joeyslalom/reimagined-couscous/proto"
 )
@@ -27,7 +23,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("writer called")
+		log.Println("writerCmd.Run()")
 		doWriter()
 	},
 }
@@ -47,7 +43,7 @@ func init() {
 }
 
 func doWriter() {
-	fmt.Println("Hello, world.")
+	log.Println("doWriter()")
 
 	ctx := context.Background()
 	projectId := "slalom-2020-293920"
@@ -59,13 +55,24 @@ func doWriter() {
 
 	topicId := "reimagined-couscous"
 	t := client.Topic(topicId)
-	data, err := proto.Marshal(&pb.HelloRequest{Name: "okay"})
+	msg := &pb.PubsubPayload{
+		Type:                 pb.PubsubPayload_IMAGE,
+		Avatar:               &pb.PubsubPayload_ImageUrl{ImageUrl: "the-url"},
+		Nested:               &pb.PubsubPayload_Nested{Name: "Nested Name", Id: 2021},
+		Nums:                 []int32{10,20,30},
+		NestedMap:            map[string]*pb.PubsubPayload_Nested{
+			"uno": &pb.PubsubPayload_Nested{Name: "one", Id: 123},
+			"dos": &pb.PubsubPayload_Nested{Name: "two", Id: 234},
+		},
+		Completed:            true,
+		LastUpdated:          timestamppb.Now(),
+	}
+	data, err := proto.Marshal(msg)
 	if err != nil {
 		log.Fatalf("proto.Marshal: %v", err)
 	}
-	result := t.Publish(ctx, &pubsub.Message{
-		Data: data,
-	})
+	log.Printf("publishing message: %v", msg)
+	result := t.Publish(ctx, &pubsub.Message{Data: data})
 	id, err := result.Get(ctx)
 	if err != nil {
 		log.Fatalf("result.Get: %v", err)

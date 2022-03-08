@@ -1,18 +1,13 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"context"
-	"fmt"
-	"github.com/golang/protobuf/proto"
 	"log"
 	"time"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/spf13/cobra"
+	"github.com/golang/protobuf/proto"
 
 	pb "github.com/joeyslalom/reimagined-couscous/proto"
 )
@@ -28,7 +23,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("reader called")
+		log.Println("readerCmd.Run()")
 		doReader()
 	},
 }
@@ -48,7 +43,7 @@ func init() {
 }
 
 func doReader() {
-	fmt.Println("Hello, world.")
+	log.Println("doReader()")
 
 	ctx := context.Background()
 	projectId := "slalom-2020-293920"
@@ -61,12 +56,17 @@ func doReader() {
 	subId := "reimagined-couscous-sub"
 	sub := client.Subscription(subId)
 	cctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	msg := &pb.PubsubPayload{}
+
 	err = sub.Receive(cctx, func(ctx context.Context, m *pubsub.Message) {
-		req := &pb.HelloRequest{}
-		if err := proto.Unmarshal(m.Data, req); err != nil {
-			log.Fatal("proto.Unmarshal: %v", err)
+		log.Println("sub.Receive()")
+		msg.Reset()
+		if err := proto.Unmarshal(m.Data, msg); err != nil {
+			log.Fatalf("proto.Unmarshal: %v", err)
 		}
-		log.Printf("Got message: %s", req.Name)
+		log.Printf("received message: %s", msg)
 		time.Sleep(10 * time.Second)
 		m.Ack()
 	})
@@ -74,6 +74,5 @@ func doReader() {
 		log.Fatalf("sub.Receive: %v", err)
 
 	}
-	cancel()
-	log.Println("fin")
+	log.Println("doReader() fin")
 }

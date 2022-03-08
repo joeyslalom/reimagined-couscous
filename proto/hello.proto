@@ -1,7 +1,9 @@
 syntax = "proto3";
-package reimaginedcouscous;
+package reimagined_couscous;
 
 option go_package = "github.com/joeyslalom/reimagined-couscous/proto";
+
+import "google/protobuf/timestamp.proto";
 
 
 service Greeter {
@@ -15,4 +17,29 @@ message HelloRequest {
 
 message HelloResponse {
   string message = 1;
+}
+
+message PubsubPayload {
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        TEXT = 1;
+        IMAGE = 2;
+        AUDIO = 3;
+        VIDEO = 4;
+    }
+    message Nested {
+        string name = 1;
+        int32 id = 2;
+    }
+
+    Type type = 1;
+    oneof avatar {
+        string image_url = 2;
+        bytes image_data = 3;
+    }
+    Nested nested = 4;
+    repeated int32 nums = 5;
+    map<string, Nested> nested_map = 6;
+    bool completed = 7;
+    google.protobuf.Timestamp last_updated = 8;    
 }
