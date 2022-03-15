@@ -1,5 +1,6 @@
 
 # 1. Create service account
+#.   * Service Account Token Creator
 # 2. Generate service account key
 #.   * In GitHub project -> Settings -> Secrets -> Actions -> New Repository Secret
 #.     Name: GCP_CREDENTIALS
@@ -40,7 +41,7 @@ jobs:
 
     - uses: 'docker/login-action@v1'
       with:
-        registry: '$GAR_LOCATION-docker.pkg.dev'
+        registry: "$GAR_LOCATION-docker.pkg.dev"
         username: 'oauth2accesstoken'
         password: '${{ steps.auth.outputs.access_token }}'
 
