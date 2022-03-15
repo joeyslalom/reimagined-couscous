@@ -27,17 +27,14 @@ jobs:
     name: Docker login, build, and push
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-      
+
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v0'
+      uses: 'google-github-actions/auth@v0.6.0'
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
