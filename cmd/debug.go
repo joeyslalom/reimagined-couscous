@@ -27,8 +27,8 @@ to quickly create a Cobra application.`,
 		if !ok {
 			log.Fatalln("debug.ReadBuildInfo() failed")
 		}
-		log.Printf("buildInfo path:%v main.path:%v main.version:%v main.sum:%v go:%v", bi.Path, bi.Main.Path, bi.Main.Version, bi.Main.Sum, bi.GoVersion)
 		log.Printf("buildInfo: %v", bi)
+		log.Printf("gitsha: %v", gitsha())
 	},
 }
 
@@ -44,4 +44,18 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// debugCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func gitsha() string {
+	bi, ok := debug.ReadBuildInfo()
+	if !ok {
+		log.Fatalln("debug.ReadBuildInfo() failed")
+	}
+	for _, s := range bi.Settings {
+		if s.Key == "vcs.revision" {
+			return s.Value
+		}
+	}
+	log.Fatalln("unable to find gitsha, go 1.18 required")
+	return ""
 }
