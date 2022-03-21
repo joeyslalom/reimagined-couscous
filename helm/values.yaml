@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: gcr.io/slalom-2020-293920/github.com/joeyslalom/reimagined-couscous
   pullPolicy: IfNotPresent
-  tag: bde7e51d16d28d4de770a72f59e264e4eb93a2ba
+  tag: 50c0c13885d09e842d56f59ff000c454b27aedc5
 
 imagePullSecrets: []
 nameOverride: ""

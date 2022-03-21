@@ -61,8 +61,8 @@ func doWriter() {
 		Nested:               &pb.PubsubPayload_Nested{Name: "Nested Name", Id: 2021},
 		Nums:                 []int32{10,20,30},
 		NestedMap:            map[string]*pb.PubsubPayload_Nested{
-			"uno": &pb.PubsubPayload_Nested{Name: "one", Id: 123},
-			"dos": &pb.PubsubPayload_Nested{Name: "two", Id: 234},
+			"uno": {Name: "one", Id: 123},
+			"dos": {Name: "two", Id: 234},
 		},
 		Completed:            true,
 		LastUpdated:          timestamppb.Now(),
@@ -72,6 +72,7 @@ func doWriter() {
 		log.Fatalf("proto.Marshal: %v", err)
 	}
 	log.Printf("publishing message: %v", msg)
+	log.Printf("timestamp: %v", msg.LastUpdated.AsTime())
 	result := t.Publish(ctx, &pubsub.Message{Data: data})
 	id, err := result.Get(ctx)
 	if err != nil {

@@ -67,7 +67,7 @@ func doReader() {
 			log.Fatalf("proto.Unmarshal: %v", err)
 		}
 		log.Printf("received message: %s", msg)
-		time.Sleep(10 * time.Second)
+		receivePayload(msg)
 		m.Ack()
 	})
 	if err != nil {
@@ -75,4 +75,10 @@ func doReader() {
 
 	}
 	log.Println("doReader() fin")
+}
+
+func receivePayload(p *pb.PubsubPayload) {
+	t := p.LastUpdated.AsTime()
+	log.Printf("payload time: %v", t)
+	time.Sleep(10 * time.Second)
 }
