@@ -28,6 +28,7 @@ to quickly create a Cobra application.`,
 			log.Fatalln("debug.ReadBuildInfo() failed")
 		}
 		log.Printf("buildInfo path:%v main.path:%v main.version:%v main.sum:%v go:%v", bi.Path, bi.Main.Path, bi.Main.Version, bi.Main.Sum, bi.GoVersion)
+		log.Printf("buildInfo: %v", bi)
 	},
 }
 
