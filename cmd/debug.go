@@ -47,15 +47,22 @@ func init() {
 }
 
 func gitsha() string {
+	sha, err := VcsRevision()
+	if err != nil {
+		log.Fatalf("VcsRevision() error: %v", err)
+	}
+	return sha
+}
+
+func VcsRevision() (string, error) {
 	bi, ok := debug.ReadBuildInfo()
 	if !ok {
-		log.Fatalln("debug.ReadBuildInfo() failed")
+		return "", fmt.Error("debug.ReadBuildInfo() !ok")
 	}
 	for _, s := range bi.Settings {
 		if s.Key == "vcs.revision" {
 			return s.Value
 		}
 	}
-	log.Fatalln("unable to find gitsha, go 1.18 required")
-	return ""
+	return "", fmt.Error("unable to find vcs.revision in BuildSettings")
 }
